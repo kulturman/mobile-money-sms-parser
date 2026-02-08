@@ -1,0 +1,50 @@
+{
+    "name": "kulturman/mobile-money-sms-parser",
+    "description": "Parse mobile money SMS notifications (Orange Money, Moov Money) to extract transaction data",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "mobile-money",
+        "sms",
+        "parser",
+        "orange-money",
+        "moov-money",
+        "africa",
+        "fcfa"
+    ],
+    "authors": [
+        {
+            "name": "Arnaud",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.0",
+        "laravel/pint": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kulturman\\MobileMoneyParser\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kulturman\\MobileMoneyParser\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "format": "pint"
+    }
+}
