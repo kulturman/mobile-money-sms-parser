@@ -8,7 +8,7 @@ readonly class ParsedSmsDTO
 {
     public function __construct(
         public int $amount,
-        public string $reference,
+        public ?string $reference,
         public ?string $transactionId,
         public ?string $senderPhone,
     ) {}

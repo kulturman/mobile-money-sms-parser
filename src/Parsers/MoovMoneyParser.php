@@ -40,14 +40,14 @@ class MoovMoneyParser implements SmsParserInterface
         throw new SmsParsingException('Unable to extract amount from SMS');
     }
 
-    private function extractReference(string $smsText): string
+    private function extractReference(string $smsText): ?string
     {
         // Support pour "Ref:", "Reference:" et "Motif:" (format local BF)
         if (preg_match('/(?:Ref|Reference|Motif)\s*:\s*([A-Za-z0-9\-_]+)/i', $smsText, $matches)) {
             return $matches[1];
         }
 
-        throw new SmsParsingException('Unable to extract reference from SMS');
+        return null;
     }
 
     private function extractTransactionId(string $smsText): ?string

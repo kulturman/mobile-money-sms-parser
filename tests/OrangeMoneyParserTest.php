@@ -53,11 +53,13 @@ it('throws exception when amount is missing', function () {
     $this->parser->parse($sms);
 })->throws(SmsParsingException::class, 'Unable to extract amount from SMS');
 
-it('throws exception when reference is missing', function () {
+it('returns null when reference is missing', function () {
     $sms = 'Paiement de 5000 FCFA recu.';
 
-    $this->parser->parse($sms);
-})->throws(SmsParsingException::class, 'Unable to extract reference from SMS');
+    $result = $this->parser->parse($sms);
+
+    expect($result->reference)->toBeNull();
+});
 
 it('converts parsed result to array', function () {
     $sms = 'Paiement de 10 000 FCFA du numero 22670999888. Ref: INV-50. Trans ID: CI250101.5678.B00002';
