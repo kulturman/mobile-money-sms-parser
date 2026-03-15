@@ -17,7 +17,7 @@ enum MobileMoneyProvider: string
         return match ($normalized) {
             'orangemoney' => self::ORANGE_MONEY,
             'moovmoney' => self::MOOV_MONEY,
-            'telecelmoney' => self::TELECEL_MONEY,
+            'telecelmoney', 'telecelmney' => self::TELECEL_MONEY,
             default => null,
         };
     }
