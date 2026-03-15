@@ -8,6 +8,7 @@ enum MobileMoneyProvider: string
 {
     case ORANGE_MONEY = 'orangemoney';
     case MOOV_MONEY = 'moovmoney';
+    case TELECEL_MONEY = 'telecelmoney';
 
     public static function fromSenderId(string $senderId): ?self
     {
@@ -16,6 +17,7 @@ enum MobileMoneyProvider: string
         return match ($normalized) {
             'orangemoney' => self::ORANGE_MONEY,
             'moovmoney' => self::MOOV_MONEY,
+            'telecelmoney' => self::TELECEL_MONEY,
             default => null,
         };
     }
@@ -25,6 +27,7 @@ enum MobileMoneyProvider: string
         return match ($this) {
             self::ORANGE_MONEY => 'Orange Money',
             self::MOOV_MONEY => 'Moov Money',
+            self::TELECEL_MONEY => 'Telecel Money',
         };
     }
 }

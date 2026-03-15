@@ -8,6 +8,7 @@ use Kulturman\MobileMoneyParser\Contracts\SmsParserInterface;
 use Kulturman\MobileMoneyParser\Enums\MobileMoneyProvider;
 use Kulturman\MobileMoneyParser\Parsers\MoovMoneyParser;
 use Kulturman\MobileMoneyParser\Parsers\OrangeMoneyParser;
+use Kulturman\MobileMoneyParser\Parsers\TelecelMoneyParser;
 
 class SmsParserFactory
 {
@@ -22,6 +23,7 @@ class SmsParserFactory
         return match ($provider) {
             MobileMoneyProvider::ORANGE_MONEY => new OrangeMoneyParser,
             MobileMoneyProvider::MOOV_MONEY => new MoovMoneyParser,
+            MobileMoneyProvider::TELECEL_MONEY => new TelecelMoneyParser,
         };
     }
 
