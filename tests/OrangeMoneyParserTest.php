@@ -61,6 +61,16 @@ it('returns null when reference is missing', function () {
     expect($result->reference)->toBeNull();
 });
 
+it('parses Orange Money SMS with decimal amount and short phone number', function () {
+    $sms = 'Vous avez recu 1,800.00 FCFA du 57652730,MARIE CLAIRE. Le solde de votre compte est de 94271.9101 FCFA Trans ID: PP260316.2147.19371398. Flashez le QR CODE marchand avec Max it pour plus de facilite : https://onelink.to/nn64xw';
+
+    $result = $this->parser->parse($sms);
+
+    expect($result->amount)->toBe(1800)
+        ->and($result->senderPhone)->toBe('57652730')
+        ->and($result->transactionId)->toBe('PP260316.2147.19371398');
+});
+
 it('converts parsed result to array', function () {
     $sms = 'Paiement de 10 000 FCFA du numero 22670999888. Ref: INV-50. Trans ID: CI250101.5678.B00002';
 

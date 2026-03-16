@@ -12,6 +12,10 @@ class OrangeMoneyParser implements SmsParserInterface
 {
     public function parse(string $smsText): ParsedSmsDTO
     {
+        // Remove commas used as thousands separator (e.g. 1,800) but not decimal separator (e.g. 8080,00)
+        $smsText = preg_replace('/(\d),(\d{3})(?!\d)/', '$1$2', $smsText);
+        // Replace remaining commas between a digit and non-digit with a space (e.g. "57652730,MARIE" -> "57652730 MARIE")
+        $smsText = preg_replace('/(\d),(?!\d)/', '$1 ', $smsText);
         $amount = $this->extractAmount($smsText);
         $reference = $this->extractReference($smsText);
         $transactionId = $this->extractTransactionId($smsText);
@@ -27,9 +31,12 @@ class OrangeMoneyParser implements SmsParserInterface
 
     private function extractAmount(string $smsText): int
     {
-        // Format Orange: paiement de 5 000 FCFA ou 5,000 FCFA
-        if (preg_match('/(\d[\d\s,]*)\s*FCFA/i', $smsText, $matches)) {
-            return (int) preg_replace('/[\s,]/', '', $matches[1]);
+        // Format Orange: paiement de 5 000 FCFA ou 1800.00 FCFA ou 8080,00 FCFA
+        if (preg_match('/(\d[\d\s.,]*\d)\s*FCFA/i', $smsText, $matches)) {
+            $cleaned = preg_replace('/\s/', '', $matches[1]);
+            // Replace decimal comma with dot, then truncate decimals
+            $cleaned = str_replace(',', '.', $cleaned);
+            return (int) $cleaned;
         }
 
         throw new SmsParsingException('Unable to extract amount from SMS');
@@ -48,7 +55,7 @@ class OrangeMoneyParser implements SmsParserInterface
     private function extractTransactionId(string $smsText): ?string
     {
         // Format Orange: Trans ID: CI241227.1234.A00001
-        if (preg_match('/Trans ID:\s*([A-Z0-9\.]+)/i', $smsText, $matches)) {
+        if (preg_match('/Trans ID:\s*([A-Z0-9]+(?:\.[A-Z0-9]+)*)/i', $smsText, $matches)) {
             return $matches[1];
         }
 
@@ -67,8 +74,8 @@ class OrangeMoneyParser implements SmsParserInterface
             return $matches[1];
         }
 
-        // Format alternatif: de 22670123456
-        if (preg_match('/(?:de|depuis)\s+(\d{11,14})/i', $smsText, $matches)) {
+        // Format alternatif: du 57652730 ou de 22670123456
+        if (preg_match('/(?:de|du|depuis)\s+(\d{8,14})/i', $smsText, $matches)) {
             return $matches[1];
         }
 
