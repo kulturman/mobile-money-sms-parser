@@ -69,6 +69,16 @@ it('returns null when reference is missing', function () {
     expect($result->reference)->toBeNull();
 });
 
+it('parses Moov Money SMS with decimal comma and accented Numéro', function () {
+    $sms = "Vous avez reçu 10 100,00 FCFA de K C THEOPHILE GNOUMOU. \nNuméro: 22672569829\nDate: 29/01/2026 16:09:54\nTID: DAT362O1CX\nSolde: 17 669,00 FCFA";
+
+    $result = $this->parser->parse($sms);
+
+    expect($result->amount)->toBe(10100)
+        ->and($result->senderPhone)->toBe('22672569829')
+        ->and($result->transactionId)->toBe('DAT362O1CX');
+});
+
 it('converts parsed result to array', function () {
     $sms = 'Montant:75 000,00FCFA. Numero:22660111222. Ref: LOYER-MAR25. TID: MP250301.1234.D00001';
 

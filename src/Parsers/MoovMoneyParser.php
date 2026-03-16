@@ -32,9 +32,11 @@ class MoovMoneyParser implements SmsParserInterface
             return (int) preg_replace('/\s/', '', $matches[1]);
         }
 
-        // Format alternatif: recu 5000 FCFA ou 5 000 FCFA
-        if (preg_match('/(\d[\d\s]*)\s*FCFA/i', $smsText, $matches)) {
-            return (int) preg_replace('/\s/', '', $matches[1]);
+        // Format alternatif: recu 5000 FCFA ou 5 000 FCFA ou 10 100,00 FCFA
+        if (preg_match('/(\d[\d\s.,]*\d)\s*FCFA/i', $smsText, $matches)) {
+            $cleaned = preg_replace('/[\s.]/', '', $matches[1]);
+            $cleaned = str_replace(',', '.', $cleaned);
+            return (int) $cleaned;
         }
 
         throw new SmsParsingException('Unable to extract amount from SMS');
@@ -67,8 +69,8 @@ class MoovMoneyParser implements SmsParserInterface
 
     private function extractSenderPhone(string $smsText): ?string
     {
-        // Format Moov: Numero:22672606628
-        if (preg_match('/Numero:\s*(\d+)/i', $smsText, $matches)) {
+        // Format Moov: Numero:22672606628 ou Numéro: 22672569829
+        if (preg_match('/Num[eé]ro:\s*(\d+)/iu', $smsText, $matches)) {
             return $matches[1];
         }
 
