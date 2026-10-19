@@ -83,3 +83,13 @@ it('converts parsed result to array', function () {
         'sender_phone' => '22670999888',
     ]);
 });
+
+it('parses an international Orange Money transfer with + prefixed sender phone', function () {
+    $sms = 'Vous avez recu 10000 FCFA du +2250709822496 (Cote d Ivoire) dans votre COMPTE RETRAIT GRATUIT. Nouveau solde OM : 53409.005 FCFA ID : 90ca5429.Composez *144*2*3# pour retirer gratuitement';
+
+    $result = $this->parser->parse($sms);
+
+    expect($result->amount)->toBe(10000)
+        ->and($result->transactionId)->toBe('90ca5429')
+        ->and($result->senderPhone)->toBe('+2250709822496');
+});

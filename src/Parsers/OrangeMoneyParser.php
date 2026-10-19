@@ -74,8 +74,8 @@ class OrangeMoneyParser implements SmsParserInterface
             return $matches[1];
         }
 
-        // Format alternatif: du 57652730 ou de 22670123456
-        if (preg_match('/(?:de|du|depuis)\s+(\d{8,14})/i', $smsText, $matches)) {
+        // Format alternatif: du 57652730, de 22670123456 ou du +2250709822496 (international)
+        if (preg_match('/(?:de|du|depuis)\s+(\+?\d{8,14})/i', $smsText, $matches)) {
             return $matches[1];
         }
 
